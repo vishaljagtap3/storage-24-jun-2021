@@ -1,17 +1,50 @@
 package `in`.bitcode.storage
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //external storage (public storage)
+        var extStorageState = Environment.getExternalStorageState()
+        if(extStorageState.equals( Environment.MEDIA_MOUNTED)) {
+            mt("Ext Storage State R+W")
+        }
+        if(extStorageState.equals( Environment.MEDIA_MOUNTED_READ_ONLY)) {
+            mt("Ext Storage State R")
+        }
+
+        var rootDir : File = Environment.getExternalStorageDirectory()
+        mt("ext storage dir ${rootDir.absolutePath}")
+
+        var extMovDir : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+        mt("ext movies dir ${extMovDir.absolutePath}")
+
+        var extAppRootDir = getExternalFilesDir(null)
+        mt("ext app root dir: ${extAppRootDir?.absolutePath}")
+
+        var extAppMoviesDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+        mt("ext app mov dir: ${extAppMoviesDir?.absolutePath}")
+
+        mt("Ext Cache: ${externalCacheDir?.absolutePath}")
+
+        var storageDir = Environment.getStorageDirectory()
+        mt("storage dir: ${storageDir.absolutePath}")
+
+        mt("get root dir ${Environment.getRootDirectory().absolutePath}")
+        mt("get data dir ${Environment.getDataDirectory().absolutePath}")
+        mt("get downloadcachedir ${Environment.getDownloadCacheDirectory().absolutePath}")
 
         //internal storage 1
         /*
@@ -36,7 +69,8 @@ class MainActivity : AppCompatActivity() {
         */
 
         //internal storage 2
-        var root = filesDir //root = getFilesDir()
+
+        /*var root = filesDir //root = getFilesDir()
         mt(filesDir.absolutePath)
 
 
@@ -79,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         listAllFilesFromDir( filesDir.parentFile, 0 )
 
         mt("Cache Dir: ${cacheDir.absolutePath}") //temporary dir getCacheDir()
+        */
 
     }
 
